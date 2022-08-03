@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.KeepSave" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/medium_purple</item>
+        <item name="colorPrimaryVariant">@color/jet</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/eton_blue</item>
+        <item name="colorSecondaryVariant">@color/ming</item>
+        <item name="colorOnSecondary">@color/jet</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="MaterialAlertDialog.Material3.Theme">
+        <item name="fontFamily">@font/ubuntu_light</item>
+    </style>
+</resources>

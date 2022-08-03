@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">KeepSave</string>
+    <string name="signInEmail">E-mail</string>
+    <string name="signInPassword">Password</string>
+    <string name="buttonSignIn">Sign in</string>
+    <string name="buttonSignUp">I don\'t have an account yet</string>
+    <string name="emailSignInError">Enter your e-mail</string>
+    <string name="passwordSignInError">Password should contain at least 6 characters</string>
+    <string name="signInError">Check that the data is entered correctly and try again</string>
+    <string name="textViewSignUp">Registering a new user</string>
+    <string name="signUpEmail">Enter your email</string>
+    <string name="buttonSignUpEmail">Continue</string>
+    <string name="emailSignUpError">Incorrect email</string>
+    <string name="emailConfirmDialogTitle">"Your email:\n"</string>
+    <string name="emailConfirmDialogMessage">Please, check the correctness of the entered email. A confirmation email will be sent to it</string>
+    <string name="emailConfirmDialogNegativeButton">Change email</string>
+    <string name="emailConfirmDialogPositiveButton">All right</string>
+    <string name="buttonSignUpCreate">Create account</string>
+    <string name="editTextSignUpPassword">Create a password</string>
+    <string name="editTextSignUpPasswordRepeat">Repeat password</string>
+    <string name="passwordSignUpFillingError">Password doesn\'t fit</string>
+    <string name="passwordsSignUpAreNotSameError">Passwords don\'t match</string>
+    <string name="passwordSignUpHelperText">Password must contain at least 6 characters(numbers, upper and lowercase letters)</string>
+    <string name="textViewEmailConfirm">Check your email</string>
+    <string name="signUpError">It looks like a user with this mail already exists</string>
+    <string name="emailSentError">An error has occurred, please try again later</string>
+    <string name="buttonConfirmEmail">Confirm email</string>
+</resources>

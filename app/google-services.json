@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "473371522468",
+    "firebase_url": "https://keepsave-pr-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "keepsave-pr",
+    "storage_bucket": "keepsave-pr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473371522468:android:a476ac720384e6e862fd31",
+        "android_client_info": {
+          "package_name": "com.zamezamo.keepsave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473371522468-lijp4orugikem9gv76e19ths36n6q8gj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5iNxlwoguoIBXJ5zemn1lm5or7pDDS68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473371522468-lijp4orugikem9gv76e19ths36n6q8gj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
