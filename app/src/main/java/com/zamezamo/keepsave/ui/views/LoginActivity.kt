@@ -2,16 +2,17 @@ package com.zamezamo.keepsave.ui.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.R
+import com.zamezamo.keepsave.data.Database
+import com.zamezamo.keepsave.domain.User
 
 class LoginActivity : AppCompatActivity() {
-
-    companion object {
-        lateinit var auth: FirebaseAuth
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -25,8 +26,9 @@ class LoginActivity : AppCompatActivity() {
 
         super.onStart()
 
-        auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
+        Database.initAuth()
+
+        val currentUser = Database.auth.currentUser
 
         if (currentUser == null)
             openFragment(SignInFragment.newInstance())
