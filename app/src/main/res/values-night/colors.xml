@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="theme_purple">#b79ced</color>
+    <color name="theme_coffee">#BD9A89</color>
+    <color name="theme_blue">#5CB8FF</color>
+    <color name="theme_green">#87CBAC</color>
+    <color name="theme_red">#E88794</color>
+
+</resources>

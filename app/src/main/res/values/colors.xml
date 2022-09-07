@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="jet">#353535</color>
-    <color name="mauve">#dec0f1</color>
-    <color name="maximum_blue_purple">#b79ced</color>
     <color name="medium_purple">#957fef</color>
+    <color name="maximum_blue_purple">#b79ced</color>
+    <color name="mauve">#dec0f1</color>
     <color name="ming">#3c6e71</color>
     <color name="eton_blue">#87CBAC</color>
+
+<!--    Colors for ideas main window -->
+
+<!--    <colorPriority name="medium_purple">#957fef</colorPriority>-->
+<!--    <colorPriority name="maximum_blue_purple">#b79ced</colorPriority>-->
+<!--    <colorPriority name="coffee">#6D4C3D</colorPriority>-->
+<!--    <colorPriority name="antique_brass">#BD9A89</colorPriority>-->
+<!--    <colorPriority name="usafa_blue">#004E89</colorPriority>-->
+<!--    <colorPriority name="blue_jeans">#5CB8FF</colorPriority>-->
+<!--    <colorPriority name="shiny_shamrock">#579E7C</colorPriority>-->
+<!--    <colorPriority name="eton_blue">#87CBAC</colorPriority>-->
+<!--    <colorPriority name="rusty_red">#D83148</colorPriority>-->
+<!--    <colorPriority name="shimmering_blush">#E88794</colorPriority>-->
+
+    <color name="theme_purple">#957fef</color>
+    <color name="theme_coffee">#6D4C3D</color>
+    <color name="theme_blue">#004E89</color>
+    <color name="theme_green">#579E7C</color>
+    <color name="theme_red">#D83148</color>
+
 </resources>
