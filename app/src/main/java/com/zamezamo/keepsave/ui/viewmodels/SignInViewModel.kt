@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zamezamo.keepsave.data.Database
 import com.zamezamo.keepsave.ui.views.LoginActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun initAuth(email: String, password: String) {
-        LoginActivity.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+        Database.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "signInWithEmail:success")
                 _mutableSignInState.value = SignInResult.Success

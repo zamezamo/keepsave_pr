@@ -1,6 +1,7 @@
 package com.zamezamo.keepsave.ui.views
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -111,7 +112,7 @@ class SignUpEmailFragment : Fragment() {
 
         hideKeyboard()
 
-        val dialog = MaterialAlertDialogBuilder(activity!!, R.style.MaterialAlertDialog_Material3_Theme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(getString(R.string.emailConfirmDialogTitle) + inputEmail)
             .setMessage(getString(R.string.emailConfirmDialogMessage))
             .setNegativeButton(getString(R.string.emailConfirmDialogNegativeButton)) { dialog, _ ->
