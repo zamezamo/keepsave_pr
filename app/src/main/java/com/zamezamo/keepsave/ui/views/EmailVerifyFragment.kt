@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.zamezamo.keepsave.R
+import com.zamezamo.keepsave.data.Database
 import com.zamezamo.keepsave.ui.viewmodels.EmailVerifyViewModel
 
 class EmailVerifyFragment : Fragment() {
@@ -24,7 +25,7 @@ class EmailVerifyFragment : Fragment() {
 
     private var textViewEmail: TextView? = null
 
-    private val user = LoginActivity.auth.currentUser
+    private val user = Database.auth.currentUser
 
     private val viewModel: EmailVerifyViewModel by viewModels()
 
@@ -49,7 +50,7 @@ class EmailVerifyFragment : Fragment() {
             when (emailVerifyState) {
 
                 EmailVerifyViewModel.EmailVerifyState.NotSent -> {
-                    viewModel.sendEmail()
+                    viewModel.sendEmailAndCreateUserInDBIfNotExists()
                 }
 
                 EmailVerifyViewModel.EmailVerifyState.Sent -> {
@@ -77,11 +78,6 @@ class EmailVerifyFragment : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        requireActivity().recreate()
-    }
-
     private fun initViews(view: View) {
 
         buttonConfirmEmail = view.findViewById(R.id.buttonConfirmEmail)
@@ -99,7 +95,7 @@ class EmailVerifyFragment : Fragment() {
 
         buttonConfirmEmail?.setOnClickListener {
 
-            LoginActivity.auth.signOut()
+            Database.auth.signOut()
 
             requireActivity().supportFragmentManager.beginTransaction()
                 .remove(this).commitNow()
