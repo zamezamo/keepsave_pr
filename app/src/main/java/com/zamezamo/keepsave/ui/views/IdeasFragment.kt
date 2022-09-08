@@ -99,7 +99,6 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
     private fun setupBottombar() {
 
         bottomAppBar = (activity as IdeasActivity).findViewById(R.id.bottomAppBarIdeasActivity)
-        bottomAppBar?.performHide(false)
 
     }
 
@@ -231,7 +230,7 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
 
         mode?.menuInflater?.inflate(R.menu.menu_ideas_actions_top, menu)
 
-        bottomAppBar?.performShow(true)
+        bottomAppBar?.visibility = View.VISIBLE
 
         return true
 
@@ -265,7 +264,7 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
 
         cancelSelectionActionMode()
 
-        bottomAppBar?.performHide(true)
+        bottomAppBar?.visibility = View.GONE
 
     }
 

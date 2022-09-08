@@ -16,7 +16,7 @@
             android:id="@+id/topAppBarIdeasActivity"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="top"/>
+            android:layout_gravity="top" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:visibility="gone"
         app:menu="@menu/menu_ideas_actions_bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
