@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zamezamo.keepsave.ui.views.LoginActivity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +17,7 @@ class SignInViewModel : ViewModel() {
         private const val TAG = "SignInViewModel"
     }
 
-    private val _mutableSignInState = MutableLiveData<SignInResult>(SignInResult.Nothing)
+    private val _mutableSignInState = MutableLiveData<SignInResult>()
 
     val signInState: LiveData<SignInResult> get() = _mutableSignInState
 
@@ -42,7 +43,10 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun initAuth(email: String, password: String) {
-        LoginActivity.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+
+        val auth = Firebase.auth
+
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "signInWithEmail:success")
                 _mutableSignInState.value = SignInResult.Success
@@ -53,15 +57,10 @@ class SignInViewModel : ViewModel() {
         }
     }
 
-    fun setSignInStateToNothing(){
-        _mutableSignInState.value = SignInResult.Nothing
-    }
-
     sealed class SignInResult {
 
         object Success : SignInResult()
         object SignInAttempt : SignInResult()
-        object Nothing: SignInResult()
 
         sealed class Error : SignInResult() {
 

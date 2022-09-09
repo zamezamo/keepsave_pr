@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zamezamo.keepsave.ui.views.LoginActivity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class SignUpPasswordViewModel: ViewModel() {
 
@@ -36,7 +37,9 @@ class SignUpPasswordViewModel: ViewModel() {
 
     private fun initCreatingAccount(email: String, password: String) {
 
-        LoginActivity.auth.createUserWithEmailAndPassword(email, password)
+        val auth = Firebase.auth
+
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")

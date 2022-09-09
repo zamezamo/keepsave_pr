@@ -111,7 +111,7 @@ class SignUpEmailFragment : Fragment() {
 
         hideKeyboard()
 
-        val dialog = MaterialAlertDialogBuilder(activity!!, R.style.MaterialAlertDialog_Material3_Theme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(getString(R.string.emailConfirmDialogTitle) + inputEmail)
             .setMessage(getString(R.string.emailConfirmDialogMessage))
             .setNegativeButton(getString(R.string.emailConfirmDialogNegativeButton)) { dialog, _ ->

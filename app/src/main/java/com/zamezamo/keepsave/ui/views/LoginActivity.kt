@@ -4,14 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.R
 
 class LoginActivity : AppCompatActivity() {
-
-    companion object {
-        lateinit var auth: FirebaseAuth
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -19,13 +16,8 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-    }
+        val auth = Firebase.auth
 
-    override fun onStart() {
-
-        super.onStart()
-
-        auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
 
         if (currentUser == null)

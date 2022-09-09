@@ -1,14 +1,42 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.KeepSave" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
+        <!-- Primary brand colorPriority. -->
         <item name="colorPrimary">@color/maximum_blue_purple</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorPrimaryVariant">@color/jet</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
+        <!-- Secondary brand colorPriority. -->
+        <item name="colorSecondary">@color/ming</item>
+        <item name="colorSecondaryVariant">@color/ming</item>
         <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <!-- Status bar colorPriority. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="toolbarStyle">@style/Widget.KeepSave.Toolbar</item>
+        <item name="bottomAppBarStyle">@style/Widget.KeepSave.BottomAppBar</item>
     </style>
+
+    <style name="Theme.KeepSave.IdeasActivity" parent="Theme.KeepSave">
+        <item name="android:statusBarColor">@color/jet</item>
+    </style>
+
+    <style name="Widget.KeepSave.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.KeepSave.Toolbar</item>
+    </style>
+
+    <style name="ThemeOverlay.KeepSave.Toolbar" parent="">
+        <item name="colorPrimary">@color/jet</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="Widget.KeepSave.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.KeepSave.BottomAppBar</item>
+    </style>
+
+    <style name="ThemeOverlay.KeepSave.BottomAppBar" parent="">
+        <item name="colorPrimary">@color/jet</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
 </resources>

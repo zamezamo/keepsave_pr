@@ -1,8 +1,8 @@
 package com.zamezamo.keepsave.ui.views
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,8 +45,6 @@ class SignInFragment() : Fragment() {
         initViews(view)
         setupListeners()
 
-        viewModel.setSignInStateToNothing()
-
         viewModel.signInState.observe(viewLifecycleOwner) { signInResult ->
 
             signInResult ?: return@observe
@@ -56,7 +54,10 @@ class SignInFragment() : Fragment() {
                     setLoading(true)
                 }
                 SignInViewModel.SignInResult.Success -> {
-                    requireActivity().recreate()
+                    val intent = Intent(context, IdeasActivity::class.java)
+
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
                 SignInViewModel.SignInResult.Error.Email -> {
                     showEmailError()
@@ -67,9 +68,6 @@ class SignInFragment() : Fragment() {
                 SignInViewModel.SignInResult.Error.SignIn -> {
                     setLoading(false)
                     showAuthError()
-                }
-                SignInViewModel.SignInResult.Nothing -> {
-                    Log.d(TAG, "Fragment recreated")
                 }
             }
 
