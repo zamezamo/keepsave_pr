@@ -23,8 +23,8 @@
     <string name="passwordSignUpHelperText">Password must contain at least 6 characters(numbers, upper and lowercase letters)</string>
     <string name="textViewEmailConfirm">Check your email</string>
     <string name="signUpError">It looks like a user with this mail already exists</string>
-    <string name="emailSentError">An error has occurred, please try again later</string>
-    <string name="buttonConfirmEmail">Confirm email</string>
+    <string name="emailSentError">Failed to send email. It may have already been sent before, please check your spam folder</string>
+    <string name="buttonConfirmEmail">I confirmed the email</string>
     <string name="menu_item_add_idea">Add idea</string>
     <string name="menu_item_select_all">Select all</string>
     <string name="item_selection">itemSelection</string>
@@ -33,4 +33,5 @@
     <string name="menu_item_share">Share idea</string>
     <string name="menu_item_delete">Delete idea</string>
     <string name="menu_item_add_to_favorites">Add to favorites</string>
+    <string name="buttonExitEmail">Exit</string>
 </resources>

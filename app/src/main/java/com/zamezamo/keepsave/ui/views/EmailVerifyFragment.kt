@@ -1,5 +1,6 @@
 package com.zamezamo.keepsave.ui.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.R
-import com.zamezamo.keepsave.data.Database
 import com.zamezamo.keepsave.ui.viewmodels.EmailVerifyViewModel
 
 class EmailVerifyFragment : Fragment() {
@@ -25,9 +27,9 @@ class EmailVerifyFragment : Fragment() {
 
     private var textViewEmail: TextView? = null
 
-    private val user = Database.auth.currentUser
-
     private val viewModel: EmailVerifyViewModel by viewModels()
+
+    private val auth = Firebase.auth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +61,7 @@ class EmailVerifyFragment : Fragment() {
 
                 EmailVerifyViewModel.EmailVerifyState.Error -> {
                     showEmailError()
+                    setLoading(false)
                 }
 
             }
@@ -84,7 +87,7 @@ class EmailVerifyFragment : Fragment() {
 
         textViewEmail = view.findViewById(R.id.textViewEmail)
 
-        textViewEmail?.text = user?.email ?: ""
+        textViewEmail?.text = auth.currentUser?.email ?: ""
 
     }
 
@@ -95,10 +98,12 @@ class EmailVerifyFragment : Fragment() {
 
         buttonConfirmEmail?.setOnClickListener {
 
-            Database.auth.signOut()
+            auth.signOut()
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .remove(this).commitNow()
+            val intent = Intent(context, LoginActivity::class.java)
+            startActivity(intent)
+
+            requireActivity().finish()
 
         }
 
@@ -109,6 +114,7 @@ class EmailVerifyFragment : Fragment() {
     }
 
     private fun showEmailError() {
+        buttonConfirmEmail?.text = getString(R.string.buttonExitEmail)
         Toast.makeText(requireActivity(), getString(R.string.emailSentError), Toast.LENGTH_SHORT)
             .show()
     }

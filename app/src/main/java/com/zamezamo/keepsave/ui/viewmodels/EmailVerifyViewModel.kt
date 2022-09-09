@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.data.Database
-import com.zamezamo.keepsave.ui.views.LoginActivity
 
 class EmailVerifyViewModel : ViewModel() {
 
@@ -20,16 +21,16 @@ class EmailVerifyViewModel : ViewModel() {
 
     fun sendEmailAndCreateUserInDBIfNotExists() {
 
-        Database.initAuth()
-        Database.initDatabase()
+        val auth = Firebase.auth
 
-        Database.auth.currentUser?.sendEmailVerification()?.addOnCompleteListener { task ->
+        auth.currentUser!!.sendEmailVerification().addOnCompleteListener { task ->
 
             if (task.isSuccessful) {
                 Log.d(TAG, "Email sent.")
                 _mutableEmailVerifyState.value = EmailVerifyState.Sent
                 Database.createUserInDBIfNotExists()
             } else {
+                Log.d(TAG, "Email not sent. " + task.exception)
                 _mutableEmailVerifyState.value = EmailVerifyState.Error
             }
 

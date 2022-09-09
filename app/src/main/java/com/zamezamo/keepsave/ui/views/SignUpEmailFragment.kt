@@ -1,7 +1,6 @@
 package com.zamezamo.keepsave.ui.views
 
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
