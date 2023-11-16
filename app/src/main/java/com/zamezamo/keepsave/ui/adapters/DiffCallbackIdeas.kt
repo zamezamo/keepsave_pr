@@ -6,7 +6,7 @@ import com.zamezamo.keepsave.domain.Idea
 import com.zamezamo.keepsave.ui.views.IdeasFragment
 import com.zamezamo.keepsave.utils.DateTimeConverter
 
-class DiffCallback : DiffUtil.ItemCallback<Idea>() {
+class DiffCallbackIdeas : DiffUtil.ItemCallback<Idea>() {
 
     companion object {
 
@@ -19,6 +19,8 @@ class DiffCallback : DiffUtil.ItemCallback<Idea>() {
         const val ARG_DESCRIPTION = "ideaDescription"
 
     }
+
+
 
     override fun areItemsTheSame(oldItem: Idea, newItem: Idea): Boolean =
         oldItem.id == newItem.id
@@ -51,12 +53,12 @@ class DiffCallback : DiffUtil.ItemCallback<Idea>() {
                         )
                     )
 
+                if (oldItem.imagesUri.first() != newItem.imagesUri.first())
+                    diff.putString(ARG_IMG_URI, newItem.imagesUri.first())
 
-                if (oldItem.imgUri != newItem.imgUri)
-                    diff.putString(ARG_IMG_URI, newItem.imgUri)
-
-                if (oldItem.description != newItem.description)
+                if (oldItem.description != newItem.description) {
                     diff.putString(ARG_DESCRIPTION, newItem.description)
+                }
 
                 diff
 
