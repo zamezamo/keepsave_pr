@@ -1,34 +1,25 @@
 package com.zamezamo.keepsave.data
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.domain.Idea
 import com.zamezamo.keepsave.domain.User
 
 object Database {
 
-    lateinit var auth: FirebaseAuth
-    lateinit var database: FirebaseDatabase
-
     private const val TAG = "data.Database"
 
-    fun initDatabase() {
-
-        database =
-            Firebase.database("https://keepsave-pr-default-rtdb.europe-west1.firebasedatabase.app/")
-
-    }
-
-    fun initAuth() {
-
-        auth = FirebaseAuth.getInstance()
-
-    }
+    private const val DB_URL = "https://keepsave-pr-default-rtdb.europe-west1.firebasedatabase.app/"
 
     fun createUserInDBIfNotExists() {
+
+        val auth = Firebase.auth
+        val database =
+            Firebase.database(DB_URL)
 
         val dbRef = database.getReference("users")
         dbRef.child("${auth.uid}").get()
@@ -48,10 +39,16 @@ object Database {
 
     fun addIdeaToDB(idea: Idea) {
 
+        val auth = Firebase.auth
+        val database =
+            Firebase.database(DB_URL)
+
         val key = database.getReference("users")
             .child("${auth.uid}").child("ideas").push().key
         val dbRef = database.getReference("users")
             .child("${auth.uid}").child("ideas")
+
+        idea.id = key
 
         dbRef.child("$key").setValue(idea).addOnSuccessListener {
             Log.d(TAG, "adding idea complete")
@@ -61,7 +58,39 @@ object Database {
 
     }
 
-    fun removeIdeaFromDB(idea: Idea) {
+    fun deleteIdeasFromDB(selected: List<Idea>?) {
+
+        val auth = Firebase.auth
+        val database =
+            Firebase.database(DB_URL)
+
+        if (selected != null) {
+            val dbRef = database.getReference("users")
+                .child("${auth.uid}").child("ideas")
+            val childUpdates = hashMapOf<String, Any?>()
+            for (idea in selected) {
+                childUpdates["/${idea.id}"] = null
+            }
+
+            dbRef.updateChildren(childUpdates).addOnSuccessListener {
+                Log.d(TAG, "deleting ideas completed")
+            }.addOnFailureListener {
+                Log.d(TAG, "deleting ideas failed")
+            }
+        }
+
+    }
+
+    fun editIdeaInDB(idea: Idea) {
+
+        val auth = Firebase.auth
+        val database =
+            Firebase.database(DB_URL)
+
+        val dbRef = database.getReference("users")
+            .child("${auth.uid}").child("ideas").child("${idea.id}")
+
+        dbRef.setValue(idea)
 
     }
 
