@@ -1,11 +1,13 @@
 package com.zamezamo.keepsave.ui.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.selection.SelectionPredicates
@@ -14,10 +16,13 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import com.zamezamo.keepsave.R
 import com.zamezamo.keepsave.data.Database
 import com.zamezamo.keepsave.domain.Idea
@@ -34,9 +39,13 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
 
         private const val TAG = "IdeasFragment"
 
+        private const val DB_URL = "https://keepsave-pr-default-rtdb.europe-west1.firebasedatabase.app/"
+
         val currentCalendar: Calendar = Calendar.getInstance()
 
     }
+
+    private var ideasAdapter: IdeasAdapter? = null
 
     private var recyclerView: RecyclerView? = null
 
@@ -56,11 +65,11 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar()
-
         initViews(view)
 
-        setupBottombar()
+        setupToolbar()
+
+        setupBottomBar()
 
     }
 
@@ -77,7 +86,8 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
 
                 if (menuItem.itemId == R.id.addIdea) {
-                    //
+                    val intent = Intent(requireActivity(), IdeasEditActivity::class.java)
+                    startActivity(intent)
                     return true
                 }
 
@@ -85,29 +95,48 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
 
             }
 
-            override fun onPrepareMenu(menu: Menu) {
-                super.onPrepareMenu(menu)
-            }
-
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        val currentActivity = activity as IdeasActivity
-        currentActivity.title = "All: Synced"
 
     }
 
-    private fun setupBottombar() {
+    private fun setupBottomBar() {
 
         bottomAppBar = (activity as IdeasActivity).findViewById(R.id.bottomAppBarIdeasActivity)
+
+        bottomAppBar?.setOnMenuItemClickListener { menuItem ->
+
+            when (menuItem.itemId) {
+
+                R.id.share -> {
+                    true
+                }
+
+                R.id.delete -> {
+                    val selected = ideasAdapter?.currentList?.filter {
+                        tracker.selection.contains(it.id)
+                    }
+                    Database.deleteIdeasFromDB(selected)
+
+                    true
+                }
+
+                R.id.add_to_favorites -> {
+                    true
+                }
+
+                else -> false
+
+            }
+
+        }
 
     }
 
     private fun initViews(view: View) {
 
         recyclerView = view.findViewById(R.id.contentIdeasRecyclerView)
-        val ideasAdapter = IdeasAdapter()
-        recyclerView?.apply {
-            setHasFixedSize(true)
+        ideasAdapter = IdeasAdapter()
+        recyclerView!!.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = ideasAdapter
         }
@@ -115,7 +144,7 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
         tracker = SelectionTracker.Builder(
             getString(R.string.item_selection),
             recyclerView!!,
-            IdeasKeyProvider(ideasAdapter),
+            IdeasKeyProvider(ideasAdapter!!),
             IdeasDetailsLookup(recyclerView!!),
             StorageStrategy.createStringStorage()
         ).withSelectionPredicate(
@@ -142,44 +171,57 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
             }
         })
 
-        ideasAdapter.tracker = tracker
+        ideasAdapter!!.tracker = tracker
 
-        Database.initDatabase()
-        Database.initAuth()
-
-        val database = Database.database.reference
-        val uid = Database.auth.uid
+        val database = Firebase.database(DB_URL).reference
+        val uid = Firebase.auth.currentUser?.uid
 
         val dbRef = database.child("users").child("$uid").child("ideas")
+
+        val ideasList: MutableList<Idea> = emptyList<Idea>().toMutableList()
 
         val childEventListener = object : ChildEventListener {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                cancelSelectionActionMode()
                 val idea = snapshot.getValue<Idea>()
-                val list = ideasAdapter.currentList.toMutableList()
-                list.add(idea)
-                ideasAdapter.submitList(list)
-                Log.d(TAG, "child added to ideas: ${snapshot.value.toString()}")
+                if (idea != null) {
+                    val list = ideasAdapter!!.currentList.toMutableList()
+                    if (!list.contains(idea)) {
+                        ideasList.add(idea)
+                        ideasAdapter!!.submitList(ideasList)
+                        ideasAdapter!!.notifyItemInserted(ideasAdapter!!.currentList.indexOfFirst { it == idea })
+                        Log.d(TAG, "child added to ideas: ${snapshot.value.toString()}")
+                    }
+
+                }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                cancelSelectionActionMode()
                 val idea = snapshot.getValue<Idea>()
                 if (idea != null) {
-                    val list = ideasAdapter.currentList.toMutableList()
-                    list[list.indexOfFirst { it.id == idea.id }] = idea
-                    ideasAdapter.submitList(list)
+                    val list = ideasAdapter!!.currentList.toMutableList()
+                    val ideaBeforeChange = ideasAdapter!!.currentList.first { it.id == idea.id }
+                    if (list.contains(ideaBeforeChange)) {
+                        ideasList[ideasList.indexOfFirst { it.id == idea.id }] = idea
+                        ideasAdapter!!.submitList(ideasList)
+                        ideasAdapter!!.notifyItemChanged(ideasAdapter!!.currentList.indexOfFirst { it == idea })
+                        Log.d(TAG, "child changed in ideas: ${snapshot.value.toString()}")
+                    }
                 }
-                Log.d(TAG, "child changed in ideas: ${snapshot.value.toString()}")
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                cancelSelectionActionMode()
                 val idea = snapshot.getValue<Idea>()
-                val list = ideasAdapter.currentList.toMutableList()
-                list.remove(idea)
-                Log.d(TAG, "child removed from ideas: ${snapshot.value.toString()}")
+                if (idea != null) {
+                    val list = ideasAdapter!!.currentList.toMutableList()
+                    if (list.contains(idea)) {
+                        val pos = ideasAdapter!!.currentList.indexOfFirst { it == idea }
+                        ideasList.remove(idea)
+                        ideasAdapter!!.submitList(ideasList)
+                        ideasAdapter!!.notifyItemRemoved(pos)
+                    }
+                    Log.d(TAG, "child removed from ideas: ${snapshot.value.toString()}")
+                }
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
@@ -191,39 +233,40 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
                 Log.e(TAG, "error child event")
             }
 
+
         }
 
         dbRef.addChildEventListener(childEventListener)
 
+            //        example for adding idea to db
 
-        // --temporary
-
-        val list = listOf<Idea>(
-            Idea(
-            "first",
-                R.color.theme_green,
-                "Hello world",
-                Idea.Location(234.045, 123.015, "NoName"),
-                Idea.DateAndTime(10,9-1,2022,17,5),
-                "https://bumptech.github.io/glide/favicon-32x32.png",
-                "Something interesting here..."
-            )
-        )
-
-        ideasAdapter.submitList(list)
-
-        // --temporary
-
+//        for (i in 1..20){
+//        val key = dbRef.push().key
+//
+//        val idea = Idea(
+//            key,
+//            R.color.theme_blue,
+//            "Key of added idea, $key",
+//            Idea.Location(53.93239560018892, 27.662400805831442, "Pervomayskiy, Minsk, Belarus"),
+//            Idea.DateAndTime(20, 10 - 1, 2022, 18, 5),
+//            listOf("https://bumptech.github.io/glide/favicon-32x32.png", "https://bumptech.github.io/glide/favicon-64x64.png"),
+//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt tortor id varius hendrerit. In convallis maximus leo, euismod tempor magna. Fusce id mauris magna. Aenean pulvinar mattis cursus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam sit amet diam turpis. Aliquam erat volutpat. Ut bibendum pretium interdum. Aenean tristique mauris quis bibendum commodo. Aliquam non felis tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec elementum augue a libero facilisis, eu laoreet mi pharetra. In a porta dui. "
+//                    )
+//
+//        dbRef.child("$key").setValue(idea).addOnSuccessListener {
+//            Log.d(TAG, "adding idea complete")
+//                    }.addOnFailureListener {
+//            Log.e(TAG, "adding idea failed")
+//                    }
+//
+//    }
     }
 
-    private fun updateAndSave(list: List<Idea>) {
-        (recyclerView?.adapter as IdeasAdapter).submitList(list)
-        //saveListOfIdeas()
-    }
-
-    private fun cancelSelectionActionMode(){
-        tracker.clearSelection()
-        actionMode = null
+    private fun cancelSelectionActionMode() {
+        if (actionMode != null) {
+            tracker.clearSelection()
+            actionMode = null
+        }
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -254,6 +297,7 @@ class IdeasFragment : Fragment(), ActionMode.Callback {
                 tracker.setItemsSelected(ideas.asIterable(), true)
 
                 true
+
             }
             else -> false
         }

@@ -3,7 +3,6 @@ package com.zamezamo.keepsave.ui.views
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.zamezamo.keepsave.R
 
 class IdeasActivity : AppCompatActivity() {

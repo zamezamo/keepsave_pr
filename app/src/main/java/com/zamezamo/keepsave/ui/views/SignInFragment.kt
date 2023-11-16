@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.zamezamo.keepsave.R
 import com.zamezamo.keepsave.ui.viewmodels.SignInViewModel
 
-class SignInFragment() : Fragment() {
+class SignInFragment : Fragment() {
 
     companion object {
         fun newInstance() = SignInFragment()

@@ -1,5 +1,6 @@
 package com.zamezamo.keepsave.ui.adapters
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +14,25 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.card.MaterialCardView
 import com.zamezamo.keepsave.R
 import com.zamezamo.keepsave.domain.Idea
+import com.zamezamo.keepsave.ui.views.IdeasEditActivity
 import com.zamezamo.keepsave.ui.views.IdeasFragment
 import com.zamezamo.keepsave.utils.DateTimeConverter
 
-class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallback()) {
+class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbackIdeas()) {
+
+    companion object {
+        private const val IDEA = "ideaSerialized"
+    }
 
     var tracker: SelectionTracker<String>? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IdeasViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): IdeasViewHolder =
         IdeasViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.fragment_ideas_item, parent, false)
         )
@@ -49,7 +58,13 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
         return currentList.size
     }
 
-    inner class IdeasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+
+    inner class IdeasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         private val materialCardView: MaterialCardView =
             itemView.findViewById(R.id.materialCardViewIdeasItem)
@@ -85,7 +100,7 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
                 DateTimeConverter.convert(idea.dateAndTime, IdeasFragment.currentCalendar)
             )
 
-            setViewIfNotEmpty(imageViewIdeasItemDescription, idea.imgUri)
+            setViewIfNotEmpty(imageViewIdeasItemDescription, idea.imagesUri.firstOrNull())
             setViewIfNotEmpty(textViewIdeasItemDescription, idea.description)
 
             changeLayoutIdeasDescVisibilityIfNotEmpty()
@@ -100,45 +115,45 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
 
         fun update(bundle: Bundle) {
 
-            if (bundle.containsKey(DiffCallback.ARG_COLOR_PRIORITY)) {
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_COLOR_PRIORITY)) {
                 constraintLayoutIdeasItemMain.setBackgroundColor(
                     ContextCompat.getColor(
                         itemView.context,
-                        bundle.getInt(DiffCallback.ARG_COLOR_PRIORITY)
+                        bundle.getInt(DiffCallbackIdeas.ARG_COLOR_PRIORITY)
                     )
                 )
             }
 
-            if (bundle.containsKey(DiffCallback.ARG_TITLE)) {
-                textViewIdeasItemTitle.text = bundle.getString(DiffCallback.ARG_TITLE)
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_TITLE)) {
+                textViewIdeasItemTitle.text = bundle.getString(DiffCallbackIdeas.ARG_TITLE)
             }
 
-            if (bundle.containsKey(DiffCallback.ARG_LOCATION)) {
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_LOCATION)) {
                 setViewIfNotEmpty(
                     textViewIdeasItemLocation,
-                    bundle.getString(DiffCallback.ARG_LOCATION)
+                    bundle.getString(DiffCallbackIdeas.ARG_LOCATION)
                 )
             }
 
-            if (bundle.containsKey(DiffCallback.ARG_DATE_AND_TIME)) {
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_DATE_AND_TIME)) {
                 setViewIfNotEmpty(
                     textViewIdeasItemDateTime,
-                    bundle.getString(DiffCallback.ARG_DATE_AND_TIME)
+                    bundle.getString(DiffCallbackIdeas.ARG_DATE_AND_TIME)
                 )
             }
 
 
-            if (bundle.containsKey(DiffCallback.ARG_IMG_URI)) {
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_IMG_URI)) {
                 setViewIfNotEmpty(
                     imageViewIdeasItemDescription,
-                    bundle.getString(DiffCallback.ARG_IMG_URI)
+                    bundle.getString(DiffCallbackIdeas.ARG_IMG_URI)
                 )
             }
 
-            if (bundle.containsKey(DiffCallback.ARG_COLOR_PRIORITY)) {
+            if (bundle.containsKey(DiffCallbackIdeas.ARG_DESCRIPTION)) {
                 setViewIfNotEmpty(
                     textViewIdeasItemDescription,
-                    bundle.getString(DiffCallback.ARG_DESCRIPTION)
+                    bundle.getString(DiffCallbackIdeas.ARG_DESCRIPTION)
                 )
             }
 
@@ -147,25 +162,26 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
         }
 
         private fun setViewIfNotEmpty(view: View, content: String?) {
-            if (content != null) {
                 when (view) {
                     is TextView -> {
-                        if (content.isNotEmpty()) {
+                        if (!content.isNullOrEmpty()) {
                             view.text = content
                             view.visibility = View.VISIBLE
                         }
+                        else view.visibility = View.GONE
                     }
                     is ImageView -> {
-                        if (content.isNotEmpty()) {
+                        if (!content.isNullOrEmpty()) {
                             Glide.with(itemView.context)
                                 .load(content)
-                                .centerCrop()
+                                .transform(MultiTransformation(CenterCrop(), RoundedCorners(12)))
                                 .into(view)
                             view.visibility = View.VISIBLE
                         }
+                        else
+                            view.visibility = View.GONE
                     }
                 }
-            }
 
         }
 
@@ -175,6 +191,8 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
                 textViewIdeasItemDescription.visibility == View.VISIBLE
             )
                 constraintLayoutIdeasItemDescription.visibility = View.VISIBLE
+            else
+                constraintLayoutIdeasItemDescription.visibility = View.GONE
         }
 
 
@@ -187,6 +205,13 @@ class IdeasAdapter : ListAdapter<Idea, IdeasAdapter.IdeasViewHolder>(DiffCallbac
                 override fun getSelectionKey(): String = getItem(adapterPosition).id!!
 
             }
+
+        override fun onClick(view: View) {
+            val idea = getItem(adapterPosition)
+            val intent = Intent(view.context, IdeasEditActivity::class.java)
+            intent.putExtra(IDEA, idea)
+            view.context.startActivity(intent)
+        }
 
     }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageViewEditIdea"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/imageButtonEditIdeaRemove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-40dp"
+        android:layout_marginBottom="-40dp"
+        android:background="@android:color/transparent"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewEditIdea"
+        app:layout_constraintStart_toEndOf="@+id/imageViewEditIdea"
+        app:srcCompat="@drawable/ic_baseline_remove_circle_24"
+        app:tint="?attr/colorOnPrimary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

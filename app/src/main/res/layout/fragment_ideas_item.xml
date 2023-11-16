@@ -5,10 +5,9 @@
     android:id="@+id/materialCardViewIdeasItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="18dp"
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
@@ -24,7 +23,6 @@
             android:id="@+id/constraintLayoutIdeasItemMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_bottom_idea"
             android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingTop="8dp"
@@ -83,17 +81,19 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/imageViewIdeasItemDescription"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="12dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@id/textViewIdeasItemDescription"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/textViewIdeasItemDescription"
@@ -107,7 +107,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageViewIdeasItemDescription"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
