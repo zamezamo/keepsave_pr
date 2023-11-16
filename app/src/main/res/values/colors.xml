@@ -27,5 +27,6 @@
     <color name="theme_blue">#004E89</color>
     <color name="theme_green">#579E7C</color>
     <color name="theme_red">#D83148</color>
+    <color name="theme_white_black">#FFFFFF</color>
 
 </resources>

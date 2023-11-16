@@ -21,6 +21,10 @@
         <item name="android:statusBarColor">@color/jet</item>
     </style>
 
+    <style name="Theme.KeepSave.IdeasEditActivity" parent="Theme.KeepSave">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
     <style name="Widget.KeepSave.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.KeepSave.Toolbar</item>
     </style>

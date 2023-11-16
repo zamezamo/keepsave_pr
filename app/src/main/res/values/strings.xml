@@ -34,4 +34,9 @@
     <string name="menu_item_delete">Delete idea</string>
     <string name="menu_item_add_to_favorites">Add to favorites</string>
     <string name="buttonExitEmail">Exit</string>
+    <string name="menu_item_edit_idea">Edit idea</string>
+    <string name="textViewDateAndTime">Time</string>
+    <string name="saving_idea_result_saved">Changes saved</string>
+    <string name="saving_idea_result_error_filling">Fill the title</string>
+    <string name="saving_idea_result_error_checking">Nothing to save</string>
 </resources>
