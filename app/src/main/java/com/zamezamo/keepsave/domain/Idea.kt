@@ -3,36 +3,36 @@ package com.zamezamo.keepsave.domain
 
 data class Idea(
 
-    val id: String? = "",
-    val colorPriority: Int? = 0,
+    var id: String? = null,
+    val colorPriority: Int? = null,
 
-    val title: String? = "",
+    val title: String? = null,
     val location: Location? = null,
     val dateAndTime: DateAndTime? = null,
 
-    val imgUri: String? = "",
-    val description: String? = ""
+    val imagesUri: List<String> = emptyList(),
+    val description: String? = null
 
-) {
+) : java.io.Serializable {
 
     data class DateAndTime(
 
-        val day: Int = 0,
-        val month: Int = 0,
-        val year: Int = 0,
+        val day: Int? = null,
+        val month: Int? = null,
+        val year: Int? = null,
 
-        val hour: Int = 0,
-        val minute: Int = 0,
+        val hour: Int? = null,
+        val minute: Int? = null,
 
-        )
+        ) : java.io.Serializable
 
     data class Location(
 
-        val latitude: Double = 0.0,
-        val longitude: Double = 0.0,
+        val latitude: Double? = null,
+        val longitude: Double? = null,
 
-        val locationName: String = ""
+        val locationName: String? = null
 
-    )
+    ) : java.io.Serializable
 
 }
